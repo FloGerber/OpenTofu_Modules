@@ -1,0 +1,103 @@
+module "sql-server-cluster" {
+  source = "github.com/canada-ca-terraform-modules/terraform-azurerm-sql-server-cluster?ref=20200813.1"
+
+  resource_group_name = "pws3-test-sql-cluster-rg"
+  keyVaultConfig = {
+    existingRGName            = "PwS3-GCPS-CRM-KeyVault-RG"
+    existingVaultName         = "PwS3-CRM-Keyvault"
+    localAdminPasswordSecret  = "server2016DefaultPassword"
+    domainAdminPasswordSecret = "adDefaultPassword"
+  }
+  secretPasswordName = "server2016DefaultPassword"
+  vnetConfig = {
+    existingVnetName = "demo-Infra-NetShared-VNET"
+    existingVnetRG   = "Demo-Infra-NetShared-RG"
+    sqlSubnet        = "10.250.29.0/26"
+    dbSubnetName     = "Demo-Shared-DB"
+  }
+  location       = "canadacentral"
+  adminUsername  = "azureadmin"
+  domainUsername = "azureadmin"
+  dnsServerName  = "DemoSharedDC01"
+  sqlServerConfig = {
+    clusterIp            = "169.254.1.15"
+    sqlLBIPAddress       = "10.250.29.14"
+    sqlLBName            = "TST-SWB"
+    sqlAOListenerPort    = "1433"
+    vmSize               = "Standard_DS3_v2"
+    vmName               = "TST-SWB"
+    sqlServerLicenseType = "AHUB"
+    sqlpatchingConfig = {
+      patchingEnabled               = true
+      dayOfWeek                     = "Sunday"
+      maintenanceWindowStartingHour = "2"
+      maintenanceWindowDuration     = 60
+    }
+    sqlBackupConfig = {
+      backupEnabled         = true
+      retentionPeriod       = 30
+      enableEncryption      = true
+      backupSystemDbs       = true
+      backupScheduleType    = "Manual"
+      fullBackupFrequency   = "Daily"
+      fullBackupStartTime   = 2
+      fullBackupWindowHours = 5
+      logBackupFrequency    = 60
+      password              = "Canada123!"
+    }
+    imageReference = {
+      sqlImagePublisher = "MicrosoftSQLServer"
+      offer             = "SQL2016SP2-WS2016"
+      sku               = "Enterprise"
+      version           = "latest"
+    }
+    dataDisks = {
+      numberOfSqlVMDisks = "2"
+      diskSizeGB         = "1024"
+    }
+    workloadType                          = "OLTP"
+    sqlServerServiceAccountUserName       = "svc-tstsql1"
+    sqlStorageAccountName                 = "tstsqltest1stg"
+    storageAccountTier                    = "Standard"
+    storageAccountReplicationType         = "LRS"
+    diagBlobEncryptionEnabled             = true
+    sqlDatabases                          = "TestServer"
+    sqlServerServiceAccountPasswordSecret = "sqlServerServiceAccountPassword"
+    enableAcceleratedNetworking           = true
+  }
+  witnessServerConfig = {
+    vmSize = "Standard_DS2_v2"
+    vmName = "TST-SVR"
+    imageReference = {
+      publisher = "MicrosoftWindowsServer"
+      offer     = "WindowsServer"
+      sku       = "2016-Datacenter"
+      version   = "latest"
+    }
+    dataDisks = {
+      diskSizeGB = "128"
+    }
+    sqlStorageAccountTier            = "Standard"
+    sqlStorageAccountReplicationType = "LRS"
+    enableAcceleratedNetworking      = true
+  }
+  adConfig = {
+    "domainName" : "shared.demo.ca",
+    "serverOUPath" : "OU=Servers,OU=DemoApp,OU=Applications,OU=PSPC,DC=shared,DC=demo,DC=ca",
+    "accountOUPath" : "OU=Service Accounts,OU=DemoApp,OU=Applications,OU=demo,DC=shared,DC=ca"
+  }
+  backupConfig = {
+    existingBackupVaultRG   = "Demo-Shared-CRM-Backup-RG"
+    existingBackupVaultName = "Demo-Shared-CRM-Backup-Vault"
+    existingBackupPolicy    = "DailyBackupPolicy"
+  }
+  tagValues = {
+    "workload"        = "Database"
+    "owner"           = "demo.user@demo.gc.ca"
+    "businessUnit"    = "Unit1"
+    "costCenterOwner" = "EA"
+    "environment"     = "Sandbox"
+    "classification"  = "Unclassified"
+    "version"         = "0.1"
+  }
+}

@@ -1,0 +1,140 @@
+stages:
+  - apply_batch_5
+  - apply_batch_4
+  - apply_batch_3
+  - apply_batch_2
+  - apply_batch_1
+
+.cache: &global_cache
+  key: "Terraspace_cache"
+  paths:
+    - .terraspace-cache//
+
+apply_keyvault:
+  stage: apply_batch_1
+  when: manual
+  script:
+    - bundle exec terraspace up keyvault -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/keyvault.log
+
+apply_management:
+  stage: apply_batch_1
+  when: manual
+  script:
+    - bundle exec terraspace up management -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/management.log
+
+apply_swarm_test:
+  stage: apply_batch_1
+  when: manual
+  script:
+    - bundle exec terraspace up swarm_test -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/swarm_test.log
+
+apply_app_gw:
+  stage: apply_batch_2
+  when: manual
+  script:
+    - bundle exec terraspace up app_gw -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/app_gw.log
+
+apply_k8s:
+  stage: apply_batch_3
+  when: manual
+  script:
+    - bundle exec terraspace up k8s -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/k8s.log
+
+apply_dns:
+  stage: apply_batch_3
+  when: manual
+  script:
+    - bundle exec terraspace up dns -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/dns.log
+
+apply_tunnel:
+  stage: apply_batch_4
+  when: manual
+  script:
+    - bundle exec terraspace up tunnel -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/tunnel.log
+
+apply_cluster_preparation:
+  stage: apply_batch_5
+  when: manual
+  script:
+    - bundle exec terraspace up cluster_preparation -y
+  environment:
+    name: 
+  cache:
+    <<: *global_cache
+  artifacts:
+    when: always
+    untracked: false
+    expire_in: 5 days
+    paths:
+    - log/up/cluster_preparation.log
+

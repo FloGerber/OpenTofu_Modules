@@ -1,0 +1,1 @@
+ENV['TS_ENV'] ||= 'development'

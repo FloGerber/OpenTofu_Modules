@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  app:
+    image: /docker/terraform:1.1.17
+    environment:
+      CURRENT_ENVIRONMENT: development
+      #      CURRENT_ENVIRONMENT: staging
+      #      TS_ENV: staging
+      #      TF_VAR_FILES: "-var-file=terraform.tfvars -var-file=development.tfvars"
+      GITLAB_BASE_URL: https://xxapi/v4
+      AZURE_STORAGE_ACCOUNT: fftfstate
+      AZURE_STORAGE_ACCOUNT_LOCATION: "Germany West Central"
+      # credentials check .env file
+      GITLAB_TOKEN: ${GITLAB_TOKEN}
+      ARM_CLIENT_ID: ${ARM_CLIENT_ID}
+      ARM_CLIENT_SECRET: ${ARM_CLIENT_SECRET}
+      ARM_TENANT_ID: ${ARM_TENANT_ID}
+      ARM_SUBSCRIPTION_ID: ${ARM_SUBSCRIPTION_ID}
+      TF_VAR_gpg_encryption_key: ${GPG_ENCRYPTION_KEY}
+      TF_VAR_public_ssl_certificate: ${PUBLIC_SSL_CERTIFICATE}
+      TF_VAR_public_ssl_password: ${PUBLIC_SSL_PASSWORD}
+    volumes:
+      - ${PWD}:${PWD}
+    working_dir: ${PWD}
+    command: tail -f /dev/null

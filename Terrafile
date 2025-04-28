@@ -1,0 +1,25 @@
+# Starter Terrafile
+# More info: https://terraspace.cloud/docs/terrafile/
+#
+# org "boltopspro" # set default github org
+#
+# Use modules from your org
+# mod "instance", source: "terraform-aws-instance", version: "v0.1.0"
+# mod "elb", source: "terraform-aws-elb"
+#
+# Use modules and specify org explicitly
+# mod "vpc", source: "boltops-tools/terraform-aws-vpc", version: "master"
+#
+# Use modules from the Terraform registry
+# mod "sqs", source: "terraform-aws-modules/sqs/aws"
+
+# base_clone_url "https://gitlab.ops.fondsfinanz.local/devops/gitops/"
+
+# #base_clone_url "git@gitlab.ops.fondsfinanz.local/devops/"
+# clone_with "https"
+
+# mod "cloud-init", source: "infrastructure/cloud-init", tag: "0.0.6"
+
+# #mod "init", source: "gitlab.ops.fondsfinanz.local/devops/cloud-init/local", tag: "0.0.5", clone_with: "https"
+
+# # ssh://git@gitlab.ops.fondsfinanz.local:2222/devops/gitops/infrastructure/cloud-init.git
